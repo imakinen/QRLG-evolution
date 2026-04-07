@@ -20,8 +20,8 @@ def convert(args):
     else:
         A = load_operator(name, j_max)
 
-    os.makedirs('data/julia/operators', exist_ok=True)
-    mmwrite(f'data/julia/operators/{name}.mtx', A)
+    os.makedirs(f'data/julia/{j_max}/operators', exist_ok=True)
+    mmwrite(f'data/julia/{j_max}/operators/{name}.mtx', A)
 
 
 if __name__ == '__main__':

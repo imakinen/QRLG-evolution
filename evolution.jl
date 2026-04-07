@@ -25,7 +25,7 @@ function Operator(name, j_max, args...)
                     " a = $(args[2]), b = $(args[3]), c = $(args[4]))"
     end
     @info msg
-    path = "data/julia/operators/$name.mtx"
+    path = "data/julia/$(j_max)/operators/$name.mtx"
     if !isfile(path)
         @info "Operator not found. Running convert.py"
         cmd = `python convert.py $name $j_max $(args)`
@@ -184,12 +184,6 @@ end
 function main()
     create_logger("julia.log")
 
-    directory = "data/julia/operators"
-    mkpath(directory)
-    for file in filter(f -> endswith(f, ".mtx"), readdir(directory))
-        rm(joinpath(directory, file))
-    end
-
     s = ArgParse.ArgParseSettings()
 
     ArgParse.@add_arg_table s begin
@@ -224,6 +218,7 @@ function main()
         kind, a, b, c = args["abc"]
         _a, _b, _c = (x -> @sprintf("%.4g", x)).(parse_.([a, b, c]))
         model = "H_abc/$(kind)__$(_a)__$(_b)__$(_c)"
+        rm("data/julia/$(j_max)/operators/H_abc.mtx"; force=true)
         H = Operator("H_abc", j_max, kind, a, b, c)
     end
 
